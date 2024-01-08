@@ -1,12 +1,12 @@
 {
   "name": "final-real-study-program",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "finally",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/danmuji1120/final_real_study_program",
   "keywords": [
     "Electron",
     "quick",
@@ -14,8 +14,8 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Dan",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^28.1.1"
   },
