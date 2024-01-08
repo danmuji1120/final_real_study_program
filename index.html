@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    />
+    <link href="./src/css/styles.css" rel="stylesheet" />
+    <link href="./src/css/popup.css" rel="stylesheet" />
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <div id="wrap">
+      <header id="header">
+        <div class="inner">
+          <div class="menu-wrap">
+            <button id="homeBtn">Home</button>
+            <button id="studyMainBtn">Study</button>
+            <button id="musicBtn">Music</button>
+          </div>
+        </div>
+      </header>
+    </div>
+    <div class="content-box">
+      <div id="graph-box">
+        <h1>NO CONTENT</h1>
+      </div>
+    </div>
+    <div class="dummy">
+      <p>
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello
+      </p>
+    </div>
+    <script src="./src/render_process/file_manager/newTestBox.js"></script>
+    <script src="./src/render_process/menuBtn/homeBtn.js"></script>
+    <script src="./src/render_process/menuBtn/musicBtn.js"></script>
+    <script src="./src/render_process/menuBtn/studyMainBtn.js"></script>
+  </body>
+</html>
