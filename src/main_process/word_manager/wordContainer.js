@@ -32,13 +32,15 @@ var word = {
   },
 };
 const test = new wordContainer(word);
-console.log(
-  "adsfasdf: ",
-  test.addWordTitle("level2", {
-    0: [["banana"], ["바나나"]],
-    1: [["cat"], ["고양이"]],
-  })
-);
+
+// console.log(
+//   "adsfasdf: ",
+//   test.addWordTitle("level2", {
+//     0: [["banana"], ["바나나"]],
+//     1: [["cat"], ["고양이"]],
+//   })
+// );
+
 // console.log(test.getWordTitle());
 // console.log(test.getWordData("level2"));
 // 단어를 추가할 경우 마지막 아이디에 1추가? 만약 마지막 아이디에 해당하는 단어를 삭제 후  새로운 단어를 추가한다면 오류 발생?

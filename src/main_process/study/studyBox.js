@@ -1,13 +1,15 @@
-const { ipcMain } = require("electron");
-
 const studyBox = {
   title: "",
   chapter: "",
+  settings: {},
   wordBox: {},
   setTitle(title) {
     this.title = title;
     this.chapter = "";
     this.wordBox = {};
+  },
+  setSettings(settingsValue) {
+    this.settings = settingsValue;
   },
   setChapter(chapter) {
     this.chapter = chapter;
@@ -18,6 +20,9 @@ const studyBox = {
   },
   getTitle() {
     return this.title;
+  },
+  getSettings() {
+    return this.settings;
   },
   getChapter() {
     return this.chapter;

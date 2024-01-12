@@ -1,8 +1,9 @@
 const { ipcMain } = require("electron");
 const path = require("node:path");
 const writeJson = require("../../file_manager/saveData");
-const programPath = require("../../file_manager/dataPath");
+const { programPath } = require("../../file_manager/dataPath");
 const checkFolder = require("../../file_manager/checkFolder");
+const loadJson = require("../../file_manager/loadData");
 
 ipcMain.on("load-title-data", (event, titleName) => {
   const rootPath = path.join(programPath, "data", "study", titleName);
@@ -15,4 +16,6 @@ ipcMain.on("load-title-data", (event, titleName) => {
   if (!checkFolder(recordPath)) {
     writeJson(recordPath, {});
   }
+  const wordBox = loadJson(wordPath);
+  event.sender.send("load-title-data-answer", wordBox);
 });

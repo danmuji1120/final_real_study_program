@@ -10,6 +10,7 @@ const rangeContents = [...document.getElementById("nameBox").children];
 const testMode = [...document.getElementById("checkBox").children].filter(
   (child) => child.tagName === "INPUT"
 );
+const ignoreSpecial = document.getElementById("ignoreSpecial");
 const incorrectAnswerNote = document.getElementById("incorrectAnswerNote");
 const answerCount = document.getElementById("answerCount");
 
@@ -53,9 +54,10 @@ submitBtn.addEventListener("click", () => {
     submitStatus.textContent = "통과";
     const newTestData = {
       name: textName.value,
-      contentLen: range.value,
+      contentLen: parseInt(range.value),
       contentText: contextData,
       testMode: selectedMode,
+      ignoreSpecial: ignoreSpecial.checked,
       incorrectAnswerNote: incorrectAnswerNote.checked,
       answerCount: answerCount.checked,
     };

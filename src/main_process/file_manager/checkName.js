@@ -1,5 +1,5 @@
 const { ipcMain } = require("electron");
-const programPath = require("./dataPath");
+const { programPath } = require("./dataPath");
 const checkFolder = require("./checkFolder");
 const path = require("node:path");
 const checkString = require("./checkString");

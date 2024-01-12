@@ -1,0 +1,24 @@
+.main-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  /* border: 2px solid black; */
+}
+.main-box * {
+  text-align: center;
+}
+
+.main-box h1 {
+  margin: 40px;
+  font-size: 20px;
+}
+.main-box input {
+  height: 60px;
+  width: 700px;
+  font-size: 40px;
+  background-color: transparent;
+  border-radius: 10px;
+}

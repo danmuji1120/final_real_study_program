@@ -50,7 +50,11 @@ body {
 }
 
 .content-box {
-  height: 90vh;
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +64,7 @@ body {
 .content-box #graph-box {
   border: 3px dashed #494848;
   width: 50vw;
-  height: 80vh;
+  height: inherit;
   border-radius: 10px;
 
   display: flex;
@@ -77,15 +81,22 @@ body {
   border: 3px dashed #494848;
   margin-right: 30px;
   width: 30vw;
-  height: 80vh;
+  height: inherit;
   border-radius: 10px;
   /* background-color: #b4b4b4; */
 }
 .title div {
   display: grid;
-  /* align-items: top; */
-  justify-content: center;
   padding: 20px;
+  /* border: 1px solid black; */
+}
+#title-box {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: top; */
+  align-items: center;
+  height: 65vh;
+  overflow: auto;
   /* border: 1px solid black; */
 }
 
@@ -98,4 +109,10 @@ body {
   height: 40px;
   font-size: 30px;
   font-weight: bolder;
+}
+
+#content-header h1 {
+  text-align: center;
+  font-size: 50px;
+  margin: 10px;
 }

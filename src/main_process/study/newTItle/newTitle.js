@@ -1,5 +1,5 @@
 const { ipcMain } = require("electron");
-const programPath = require("../../file_manager/dataPath");
+const { programPath } = require("../../file_manager/dataPath");
 const checkFolder = require("../../file_manager/checkFolder");
 const path = require("node:path");
 const writeJson = require("../../file_manager/saveData");
@@ -8,7 +8,6 @@ const newFolder = require("../../file_manager/newFolder");
 
 ipcMain.on("new-test-box", (event, data) => {
   try {
-    console.log("adfadsfa: ", rootPath);
     newFolder(rootPath);
     studyPath = path.join(rootPath, "study");
     newFolder(studyPath);

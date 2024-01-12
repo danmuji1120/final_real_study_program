@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    />
+    <link href="../src/css/styles.css" rel="stylesheet" />
+    <link href="../src/css/popup.css" rel="stylesheet" />
+    <link href="../src/css/newChapterPopup.css" rel="stylesheet" />
+    <!-- <link href="./src/css/popup.css" rel="stylesheet" /> -->
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <div id="wrap">
+      <header id="header">
+        <div class="inner">
+          <div class="menu-wrap">
+            <button id="homeBtn">Home</button>
+            <button id="studyMainBtn">Study</button>
+            <button id="musicBtn">Music</button>
+          </div>
+        </div>
+      </header>
+    </div>
+    <div id="content-header">
+      <h1>New Chapter</h1>
+    </div>
+    <div class="popup-box" id="popup">
+      <section id="chapterName">
+        <input id="inputChapterName" type="text" />
+        <button id="checkChapterNameBtn">확인</button>
+        <p id="checkChapterNameStatus">name status</p>
+      </section>
+      <section id="wordLine">
+        <div id="wordLineBox"></div>
+        <button id="addWordLineBtn">+</button>
+      </section>
+      <section>
+        <p id="submitNewChapterStatus">빈칸을 모두 입력하세요.</p>
+        <button id="submitNewChapterBtn">저장</button>
+      </section>
+    </div>
+    <!-- <script src="./src/render_process/file_manager/newTestBox.js"></script> -->
+  </body>
+  <script src="../src/render_process/menuBtn/homeBtn.js"></script>
+  <script src="../src/render_process/menuBtn/musicBtn.js"></script>
+  <script src="../src/render_process/menuBtn/studyMainBtn.js"></script>
+  <script src="../src/render_process/study/newChapter/checkChapterName.js"></script>
+  <script src="../src/render_process/study/newChapter/newWordLine.js"></script>
+  <script src="../src/render_process/study/newChapter/submitNewChapter.js"></script>
+  <script src="../src/render_process/study/newChapter/renderWordLine.js"></script>
+</html>
