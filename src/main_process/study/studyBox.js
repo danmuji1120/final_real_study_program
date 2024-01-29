@@ -1,3 +1,6 @@
+const getChapterData = require("./getData/getChapterData");
+const getTitleSettingsData = require("./getData/getTItleSettingsData");
+
 const studyBox = {
   title: "",
   chapter: "",
@@ -5,18 +8,13 @@ const studyBox = {
   wordBox: {},
   setTitle(title) {
     this.title = title;
+    this.settings = getTitleSettingsData(title);
     this.chapter = "";
     this.wordBox = {};
   },
-  setSettings(settingsValue) {
-    this.settings = settingsValue;
-  },
   setChapter(chapter) {
     this.chapter = chapter;
-    this.wordBox = {};
-  },
-  setWordBox(wordBox) {
-    this.wordBox = wordBox;
+    this.wordBox = getChapterData(this.title, chapter);
   },
   getTitle() {
     return this.title;

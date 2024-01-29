@@ -1,12 +1,16 @@
-class Study {
+class TopStudy {
   constructor(wordBox) {
     this.wordBox = wordBox;
+    this.questionIdList = [];
     this.randomIdList = [];
     this.currentId = 0;
   }
   setRandomIdList() {
-    this.randomIdList = Object.keys(this.wordBox);
+    this.randomIdList = this.questionIdList.slice();
     shuffleArray(this.randomIdList);
+  }
+  setQuestionIdList(idList = Object.keys(this.wordBox)) {
+    this.questionIdList = idList;
   }
   setCurrentId() {
     this.currentId = this.randomIdList.pop();
@@ -33,4 +37,4 @@ function shuffleArray(array) {
   }
 }
 
-module.exports = Study;
+module.exports = TopStudy;

@@ -1,10 +1,12 @@
-const Study = require("./topStudyContainer");
+const saveRecord = require("./saveRecord");
+const TopStudy = require("./topStudyContainer");
 
-class MiddleStudy extends Study {
+class MiddleStudy extends TopStudy {
   constructor(wordBox) {
     super(wordBox);
     this.questionIndex = 0;
     this.answerIndex = 1;
+    this.record = {};
   }
   getQuestionData() {
     return this.wordBox[this.currentId][this.questionIndex];
@@ -22,18 +24,28 @@ class MiddleStudy extends Study {
   moveIndex() {
     const wordBoxLength = Object.values(this.wordBox)[0].length;
     if (this.answerIndex === 0) {
-      console.log("여기 실행 맞잖아");
       return false;
     } else if (this.answerIndex < wordBoxLength - 1) {
-      console.log("여기야?");
       this.answerIndex += 1;
       return true;
     } else {
-      console.log("여긴아니잖아?");
-
       this.answerIndex = 1;
       return false;
     }
+  }
+  generateRecordContainer() {
+    if (Object.keys(this.record).length === 0) {
+      Object.keys(this.wordBox).forEach((element) => {
+        this.record[element] = {};
+      });
+    }
+    Object.keys(this.wordBox).forEach((element) => {
+      this.record[element][`${this.questionIndex}-${this.answerIndex}`] = [];
+    });
+  }
+  save() {
+    saveRecord(this.record);
+    this.record = {};
   }
 }
 

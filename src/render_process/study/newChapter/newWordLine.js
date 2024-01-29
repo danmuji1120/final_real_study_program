@@ -16,12 +16,11 @@ addWordLineBtn.addEventListener("click", () => {
   lineDiv.id = lineNumber;
   lineNumber += 1;
   const lineCount = document.createElement("p");
-  lineCount.textContent = lineNumber + 1;
+  lineCount.textContent = lineNumber;
   lineDiv.appendChild(lineCount);
   for (let i = 0; i < contentLength; i++) {
     const wordInput = document.createElement("input");
     wordInput.type = "text";
-    wordInput.value = lineDiv.id;
     lineDiv.appendChild(wordInput);
   }
   // 라인 삭제 버튼

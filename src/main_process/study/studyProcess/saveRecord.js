@@ -10,7 +10,7 @@ function saveRecord(newData) {
   console.log("저장할 경로: ", recordPath);
   console.log("원본 데이터: ", recordData);
   console.log("새로운 데이터: ", newData);
-  if (recordData[studyBox.getChapter]) {
+  if (recordData[studyBox.getChapter()]) {
     recordData[studyBox.getChapter()][nowDate()] = newData;
   } else {
     recordData[studyBox.getChapter()] = {};

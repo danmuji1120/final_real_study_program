@@ -2,14 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
     />
     <link href="../src/css/styles.css" rel="stylesheet" />
-    <!-- <link href="./src/css/popup.css" rel="stylesheet" /> -->
-    <title>Hello World!</title>
+    <title>Final Real Study Program</title>
   </head>
   <body>
     <div id="wrap">
@@ -20,13 +18,31 @@
             <button id="studyMainBtn">Study</button>
             <button id="musicBtn">Music</button>
           </div>
-          <h1>MusicTap</h1>
         </div>
       </header>
     </div>
-    <!-- <script src="./src/render_process/file_manager/newTestBox.js"></script> -->
+    <div id="content-header">
+      <h1 id="window-title">Music</h1>
+    </div>
+    <div class="content-box">
+      <div class="title">
+        <div id="title-box"></div>
+      </div>
+      <div id="graph-box">
+        <h1>NO CONTENT</h1>
+      </div>
+    </div>
+    <div class="dummy">
+      <p>
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
+        Hello
+      </p>
+    </div>
   </body>
   <script src="../src/render_process/menuBtn/homeBtn.js"></script>
   <script src="../src/render_process/menuBtn/musicBtn.js"></script>
   <script src="../src/render_process/menuBtn/studyMainBtn.js"></script>
+  <script src="../src/render_process/music/requestData/requestTitle.js"></script>
 </html>

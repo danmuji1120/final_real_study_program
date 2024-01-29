@@ -31,7 +31,7 @@ var word = {
     0: [["apple"], ["사과"]],
   },
 };
-const test = new wordContainer(word);
+// const test = new wordContainer(word);
 
 // console.log(
 //   "adsfasdf: ",
@@ -45,4 +45,6 @@ const test = new wordContainer(word);
 // console.log(test.getWordData("level2"));
 // 단어를 추가할 경우 마지막 아이디에 1추가? 만약 마지막 아이디에 해당하는 단어를 삭제 후  새로운 단어를 추가한다면 오류 발생?
 // 점수 데이터에 해당하는 아이디도 삭제해야 함
-module.exports = wordContainer;
+// module.exports = wordContainer;
+
+// 삭제 예정

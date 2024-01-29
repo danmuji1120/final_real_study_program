@@ -4,6 +4,9 @@ window.api.receive("load-title-data-answer", (wordBox) => {
   while (titleBox.firstChild) {
     titleBox.removeChild(titleBox.firstChild);
   }
+  while (graphBox.firstChild) {
+    graphBox.removeChild(graphBox.firstChild);
+  }
   const fragmentChapterBtn = document.createDocumentFragment();
   Object.keys(wordBox).forEach((key) => {
     const chapterBtn = document.createElement("button");

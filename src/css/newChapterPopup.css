@@ -1,6 +1,28 @@
 .popup-box {
   display: grid;
+  overflow: auto;
+  height: 60vh;
+  width: 100vw;
+  border: none;
+  align-content: start;
+}
+.popup-box button {
+  height: 30px;
+  width: 60px;
+}
+.popup-box * {
+  font-size: 20px;
 }
 #wordLineBox {
   display: grid;
+}
+
+#wordLineBox input {
+  height: 30px;
+  width: 300px;
+}
+
+#wordLineBox div p {
+  width: 40px;
+  text-align: right;
 }

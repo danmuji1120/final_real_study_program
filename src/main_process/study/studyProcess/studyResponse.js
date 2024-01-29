@@ -7,26 +7,14 @@ var mainStudy;
 ipcMain.on("start-study", (event, data) => {
   mainStudy = new LowerStudy(studyBox.getWordBox(), studyBox.getSettings());
   mainStudy.start();
-  event.sender.send("study-answer-answer", {
-    questionData: mainStudy.getQuestionData(),
-    message: mainStudy.getMessage(),
-  });
+  event.sender.send("study-answer-answer", mainStudy.message);
 });
 
 ipcMain.on("study-answer", (event, userAnswer) => {
   console.log("입력이 메인에 들어옴");
-  if (mainStudy.answerEvent(userAnswer)) {
-    event.sender.send("study-answer-answer", {
-      questionData: mainStudy.getQuestionData(),
-      message: mainStudy.getMessage(),
-    });
+  if (mainStudy.answer(userAnswer)) {
+    event.sender.send("study-answer-answer", mainStudy.message);
   } else {
-    if (mainStudy.incorrectAnswerNoteMode === false) {
-      mainStudy.save();
-      event.sender.send("study-answer-answer", {
-        questionData: "끝났습니다.",
-        message: { text: "", color: "" },
-      });
-    }
+    event.sender.send("study-answer-answer", false);
   }
 });

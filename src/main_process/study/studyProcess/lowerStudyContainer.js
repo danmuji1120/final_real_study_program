@@ -1,102 +1,146 @@
-const { ipcMain, ipcRenderer } = require("electron");
 const MiddleStudy = require("./middleStudyContainer");
-const saveRecord = require("./saveRecord");
+const setCorrectId = require("../AnalyzeRecord/setCorrectId");
 
-ANSWERCOUNT = 2;
+ANSWERCOUNT = 3;
 
 class LowerStudy extends MiddleStudy {
   constructor(wordBox, settings) {
     super(wordBox);
     this.settings = settings;
-    this.record = {};
-    this.printLog();
-    this.setRecord();
     this.status = "before start";
     this.alreadyAnswer = [];
-    this.message = { text: "", color: "" };
+    this.message = { question: [], statusText: "", statusColor: "" };
     this.answerCount = ANSWERCOUNT;
     this.incorrectAnswerNoteMode = false;
-    this.incorrectAnswerNote = [];
-  }
-  printLog() {
-    console.log("시험볼 데이터: ", this.wordBox);
-    console.log("object: ", Object.keys(this.wordBox));
+    this.incorrectAnswerNoteList = [];
+    this.incorrectAnswerNoteCount = 0;
   }
   start() {
+    this.setQuestionIdList();
     this.setRandomIdList();
     this.setCurrentId();
+    this.message.question = this.getQuestionData();
+    this.generateRecordContainer();
+    while (this.moveIndex()) {
+      this.generateRecordContainer();
+    }
     this.status = "proceeding";
-    this.message.text = `다음 ${
+    this.message.statusText = `다음 ${
       this.settings.contentText[this.questionIndex]
     }를 보고 ${this.settings.contentText[this.answerIndex]}를 입력하세요.`;
   }
-  setRecord() {
-    if (Object.keys(this.record).length === 0) {
-      Object.keys(this.wordBox).forEach((element) => {
-        this.record[element] = {};
-      });
+  startIncorrectAnswerNote() {
+    this.message.statusText = "";
+    for (let i = 0; i < this.incorrectAnswerNoteCount; i++) {
+      this.message.statusText += "오답노트의 ";
     }
-    Object.keys(this.wordBox).forEach((element) => {
-      this.record[element][`${this.questionIndex}-${this.answerIndex}`] = [];
-    });
+    this.message.statusText += "오답노트를 실행하려면 엔터를 입력하세요.";
+    this.message.statusColor = "black";
+    this.setQuestionIdList(this.incorrectAnswerNoteList);
+    this.setRandomIdList();
+    this.incorrectAnswerNoteList = [];
+    this.questionIndex = 0;
+    this.answerIndex = 1;
+    this.status = "stop";
+    this.incorrectAnswerNoteCount += 1;
+    this.record = {};
+    this.generateRecordContainer();
+    while (this.moveIndex()) {
+      this.generateRecordContainer();
+    }
   }
-  answerEvent(userAnswer) {
-    console.log("정답 이벤트 실행");
-    console.log("문제 인덱스: ", this.questionIndex);
-    console.log("정답 인덱스: ", this.answerIndex);
-    if (this.status === "stop") {
-      console.log("상태가 stop일 경우");
-      if (this.moveIndex()) {
-        console.log("다음 정답인덱스");
-        this.message.text = "";
-        this.status = "proceeding";
-        return true; // 계속
+  nextQuestion() {
+    if (this.setCurrentId()) {
+      this.message.question = this.getQuestionData();
+      this.status = "proceeding";
+      this.message.statusText = `다음 ${
+        this.settings.contentText[this.questionIndex]
+      }를 보고 ${this.settings.contentText[this.answerIndex]}를 입력하세요.`;
+      this.message.statusColor = "black";
+      return true; // 계속
+    } else {
+      return this.changeQuestion();
+    }
+  }
+  // 문제를 전환한다.
+  changeQuestion() {
+    if (this.settings.testMode === "oneWay") {
+      this.setCorrectPersent();
+      return false; // 종료
+    } else if (this.settings.testMode === "twoWay") {
+      if (this.questionIndex !== 0) {
+        this.setCorrectPersent();
+        return false; // 종료
       } else {
-        if (this.setCurrentId()) {
-          this.status = "proceeding";
-          this.message.text = `다음 ${
+        this.changeIndex();
+        this.generateRecordContainer();
+        this.setRandomIdList();
+        this.setCurrentId();
+        this.message.question = this.getQuestionData();
+        this.status = "precessing";
+        this.message.statusText = `이제 ${
+          this.settings.contentText[this.questionIndex]
+        }을 보고 ${this.settings.contentText[this.answerIndex]}를 입력하세요.`;
+        this.message.statusColor = "black";
+        return true;
+      }
+    }
+  }
+  answer(userAnswer) {
+    if (this.answerEvent(userAnswer)) {
+      return true;
+    } else {
+      if (!this.incorrectAnswerNoteMode) {
+        this.save();
+        this.incorrectAnswerNoteMode = true;
+      }
+      if (
+        this.settings.incorrectAnswerNote &&
+        this.incorrectAnswerNoteList.length !== 0
+      ) {
+        this.startIncorrectAnswerNote();
+        return true;
+      } else {
+        this.message.statusText = "종료 엔터 입력시 메인화면으로 돌아가기";
+        this.message.statusColor = "black";
+        return false;
+      }
+    }
+  }
+
+  answerEvent(userAnswer) {
+    // console.log("오답노트리스트: ", this.incorrectAnswerNoteList);
+    // console.log("남은 문제 리스트", this.randomIdList);
+    if (userAnswer === true) {
+      this.forceCorrectProcess();
+      console.log(this.record);
+      return true;
+    } else {
+      if (this.status === "stop") {
+        console.log("상태가 stop일 경우");
+        if (this.moveIndex()) {
+          console.log("다음 정답인덱스");
+          this.message.statusText = this.message.statusText = `이제 ${
             this.settings.contentText[this.questionIndex]
-          }를 보고 ${
+          }을 보고 ${
             this.settings.contentText[this.answerIndex]
           }를 입력하세요.`;
-          this.message.color = "black";
-
+          this.message.statusColor = "black";
+          this.status = "proceeding";
           return true; // 계속
         } else {
-          if (this.settings.testMode === "oneWay") {
-            return false; // 종료
-          } else if (this.settings.testMode === "twoWay") {
-            if (this.questionIndex !== 0) {
-              return false;
-            } else {
-              this.changeIndex();
-              this.setRecord();
-              this.setRandomIdList();
-              this.setCurrentId();
-              this.status = "precessing";
-              this.message.text = `이제 ${
-                this.settings.contentText[this.questionIndex]
-              }을 보고 ${
-                this.settings.contentText[this.answerIndex]
-              }를 입력하세요.`;
-              this.message.color = "black";
-              return true;
-            }
-          }
+          return this.nextQuestion();
         }
+      } else {
+        this.answerProcessing(userAnswer);
+        return true;
       }
-    } else {
-      this.answerProcessing(userAnswer);
-      return true;
     }
   }
   answerProcessing(userAnswer) {
-    console.log("정답처리 시작");
     const answerData = this.getAnswerData();
-    console.log("정답리스트: ", answerData);
     let valueToggle = false;
     answerData.forEach((value, index) => {
-      console.log("현재의 정답: ", value);
       if (this.settings.ignoreSpecial) {
         console.log("특수문자 무시 on");
         userAnswer = userAnswer
@@ -106,30 +150,21 @@ class LowerStudy extends MiddleStudy {
           .replace(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/gi, "")
           .replace(/[\s]/gi, "");
       }
+      // 답이 같은 경우
       if (value === userAnswer) {
         valueToggle = true;
-        console.log("정답: ", value, " 입력한 값: ", userAnswer);
-        console.log("입력한 값과 정답이 동일");
-        // 답이 같은 경우
-        if (index in this.alreadyAnswer) {
-          console.log("이미 입력한 답");
-
-          // 이미 입력한 답일 경우
-          this.message.text = "이미 입력한 답입니다.";
-          this.message.color = "red";
-        } else {
-          console.log("중복되지 않고 정답");
-
-          // 답이 같은데 이미 입력한 답이 아닐 경우
-          console.log(this.record);
-          console.log(this.getCurrentId());
-          console.log(`${this.questionIndex}-${this.answerIndex}`);
-          console.log(this.record[this.getCurrentId()]);
+        // 이미 입력한 답일 경우
+        if (this.alreadyAnswer.includes(index)) {
           console.log(
-            this.record[this.getCurrentId()][
-              `${this.questionIndex}-${this.answerIndex}`
-            ]
+            "현재 인덱스: ",
+            index,
+            "이미 입력한 인덱스: ",
+            this.alreadyAnswer
           );
+          this.message.statusText = "이미 입력한 답입니다.";
+          this.message.statusColor = "red";
+        } else {
+          // 답이 같은데 이미 입력한 답이 아닐 경우
           this.record[this.getCurrentId()][
             `${this.questionIndex}-${this.answerIndex}`
           ].push(index);
@@ -137,47 +172,69 @@ class LowerStudy extends MiddleStudy {
           if (this.alreadyAnswer.length === this.getAnswerData().length) {
             console.log("모든 정답을 맞춤");
             this.answerCount = ANSWERCOUNT;
-            this.message.text = "정답. 엔터를 입력하면 다음 문제";
-            this.message.color = "green";
+            this.message.statusText = "정답. 엔터를 입력하면 다음 문제";
+            this.message.statusColor = "green";
             this.status = "stop";
             this.alreadyAnswer = [];
           } else {
-            console.log("하나 이상의 정답이 존재");
-
-            this.message.text = `정답, 또 다른 ${
+            this.message.statusText = `정답, 또 다른 ${
               this.settings.contentText[this.answerIndex]
             }`;
-            this.message.color = "green";
+            this.message.statusColor = "green";
           }
         }
       }
     });
+    // 답이 틀릴 경우
     if (valueToggle === false) {
-      console.log("답이 틀렸음");
-      // 답이 틀릴 경우
       this.answerCount -= 1;
       if (this.answerCount === 0) {
-        console.log("기회 모두 사용");
-        this.message.text = `정답은 ${this.getAnswerData()}. 엔터를 입력하면 다음 문제`;
-        this.message.color = "red";
+        this.message.statusText = `정답은 ${this.getAnswerData()}. 엔터를 입력하면 다음 문제`;
+        this.message.statusColor = "red";
+        this.alreadyAnswer = [];
         this.answerCount = ANSWERCOUNT;
         this.status = "stop";
-        if (!this.incorrectAnswerNote.includes(this.getCurrentId())) {
-          this.incorrectAnswerNote.push(this.getCurrentId());
+        // 오답노트에 ID추가
+        if (!this.incorrectAnswerNoteList.includes(this.getCurrentId())) {
+          this.incorrectAnswerNoteList.push(this.getCurrentId());
         }
       } else {
-        console.log("기회 남음");
-        this.message.text = `틀린 답입니다. 남은 기회${this.answerCount}`;
-        this.message.color = "red";
+        this.message.statusText = `틀린 답입니다. 남은 기회${this.answerCount}`;
+        this.message.statusColor = "red";
       }
     }
-    console.log(this.incorrectAnswerNote);
-  }
-  save() {
-    saveRecord(this.record);
   }
   getMessage() {
     return this.message;
+  }
+  setCorrectPersent() {
+    const correctIdList = setCorrectId(this.record, this.wordBox);
+    const correctPerWordBox =
+      (correctIdList.length / Object.keys(this.wordBox).length) * 100;
+    this.message.question = `전체 ${Object.keys(this.wordBox).length}개중 ${
+      correctIdList.length
+    }개 정답\n 정답률: ${parseInt(correctPerWordBox)}`;
+  }
+  forceCorrectProcess() {
+    this.wordBox[this.getCurrentId()][this.answerIndex].forEach(
+      (value, index) => {
+        if (
+          !this.record[this.getCurrentId()][
+            `${this.questionIndex}-${this.answerIndex}`
+          ].includes(index)
+        ) {
+          this.record[this.getCurrentId()][
+            `${this.questionIndex}-${this.answerIndex}`
+          ].push(index);
+        }
+      }
+    );
+    console.log("강제 정답 처리");
+    this.answerCount = ANSWERCOUNT;
+    this.message.statusText = "강제 정답 처리. 엔터를 입력하면 다음 문제";
+    this.message.statusColor = "green";
+    this.status = "stop";
+    this.alreadyAnswer = [];
   }
 }
 
