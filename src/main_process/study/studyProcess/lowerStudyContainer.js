@@ -15,16 +15,37 @@ class LowerStudy extends MiddleStudy {
     this.incorrectAnswerNoteList = [];
     this.incorrectAnswerNoteCount = 0;
   }
+  generateRecordContainer(idList = this.questionIdList) {
+    this.recordBox.reset();
+    this.questionIndex = 0;
+    this.answerIndex = 1;
+    this.recordBox.generateIdContainer(idList);
+    this.recordBox.generateIndexContainer(this.questionIndex, this.answerIndex);
+    while (this.moveIndex()) {
+      this.recordBox.generateIndexContainer(
+        this.questionIndex,
+        this.answerIndex
+      );
+    }
+    if (this.settings.testMode === "twoWay") {
+      this.changeIndex();
+      this.recordBox.generateIndexContainer(
+        this.questionIndex,
+        this.answerIndex
+      );
+    }
+    this.questionIndex = 0;
+    this.answerIndex = 1;
+    console.log(this.recordBox.record);
+  }
   start() {
     this.setQuestionIdList();
     this.setRandomIdList();
     this.setCurrentId();
-    this.message.question = this.getQuestionData();
     this.generateRecordContainer();
-    while (this.moveIndex()) {
-      this.generateRecordContainer();
-    }
+
     this.status = "proceeding";
+    this.message.question = this.getQuestionData();
     this.message.statusText = `다음 ${
       this.settings.contentText[this.questionIndex]
     }를 보고 ${this.settings.contentText[this.answerIndex]}를 입력하세요.`;
@@ -43,11 +64,9 @@ class LowerStudy extends MiddleStudy {
     this.answerIndex = 1;
     this.status = "stop";
     this.incorrectAnswerNoteCount += 1;
-    this.record = {};
     this.generateRecordContainer();
-    while (this.moveIndex()) {
-      this.generateRecordContainer();
-    }
+    console.log(this.questionIdList);
+    console.log(this.record);
   }
   nextQuestion() {
     if (this.setCurrentId()) {
@@ -73,7 +92,6 @@ class LowerStudy extends MiddleStudy {
         return false; // 종료
       } else {
         this.changeIndex();
-        this.generateRecordContainer();
         this.setRandomIdList();
         this.setCurrentId();
         this.message.question = this.getQuestionData();
@@ -87,11 +105,13 @@ class LowerStudy extends MiddleStudy {
     }
   }
   answer(userAnswer) {
-    if (this.answerEvent(userAnswer)) {
+    if (this.status == "end") {
+      return false;
+    } else if (this.answerEvent(userAnswer)) {
       return true;
     } else {
       if (!this.incorrectAnswerNoteMode) {
-        this.save();
+        this.recordBox.save();
         this.incorrectAnswerNoteMode = true;
       }
       if (
@@ -100,10 +120,12 @@ class LowerStudy extends MiddleStudy {
       ) {
         this.startIncorrectAnswerNote();
         return true;
-      } else {
+      } else if (this.status == "stop") {
+        this.setCorrectPersent();
         this.message.statusText = "종료 엔터 입력시 메인화면으로 돌아가기";
         this.message.statusColor = "black";
-        return false;
+        this.status = "end";
+        return true;
       }
     }
   }
@@ -113,7 +135,6 @@ class LowerStudy extends MiddleStudy {
     // console.log("남은 문제 리스트", this.randomIdList);
     if (userAnswer === true) {
       this.forceCorrectProcess();
-      console.log(this.record);
       return true;
     } else {
       if (this.status === "stop") {
@@ -165,9 +186,12 @@ class LowerStudy extends MiddleStudy {
           this.message.statusColor = "red";
         } else {
           // 답이 같은데 이미 입력한 답이 아닐 경우
-          this.record[this.getCurrentId()][
-            `${this.questionIndex}-${this.answerIndex}`
-          ].push(index);
+          this.recordBox.pushAnswerIndex(
+            this.getCurrentId(),
+            this.questionIndex,
+            this.answerIndex,
+            index
+          );
           this.alreadyAnswer.push(index);
           if (this.alreadyAnswer.length === this.getAnswerData().length) {
             console.log("모든 정답을 맞춤");
@@ -208,25 +232,24 @@ class LowerStudy extends MiddleStudy {
     return this.message;
   }
   setCorrectPersent() {
-    const correctIdList = setCorrectId(this.record, this.wordBox);
+    const correctIdList = setCorrectId(this.recordBox.record, this.wordBox);
     const correctPerWordBox =
-      (correctIdList.length / Object.keys(this.wordBox).length) * 100;
-    this.message.question = `전체 ${Object.keys(this.wordBox).length}개중 ${
-      correctIdList.length
-    }개 정답\n 정답률: ${parseInt(correctPerWordBox)}`;
+      (correctIdList.length / Object.keys(this.questionIdList).length) * 100;
+    this.message.question = `전체 ${
+      Object.keys(this.questionIdList).length
+    }개중 ${correctIdList.length}개 정답\n 정답률: ${parseInt(
+      correctPerWordBox
+    )}`;
   }
   forceCorrectProcess() {
     this.wordBox[this.getCurrentId()][this.answerIndex].forEach(
       (value, index) => {
-        if (
-          !this.record[this.getCurrentId()][
-            `${this.questionIndex}-${this.answerIndex}`
-          ].includes(index)
-        ) {
-          this.record[this.getCurrentId()][
-            `${this.questionIndex}-${this.answerIndex}`
-          ].push(index);
-        }
+        this.recordBox.pushAnswerIndex(
+          this.getCurrentId,
+          this.questionIndex,
+          this.answerIndex,
+          index
+        );
       }
     );
     console.log("강제 정답 처리");

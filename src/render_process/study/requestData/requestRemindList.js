@@ -1,4 +1,5 @@
 window.api.send("remind-list", true);
+graphBox.style.overflow = "auto";
 window.api.receive("remind-list-answer", (data) => {
   while (graphBox.firstChild) {
     graphBox.removeChild(graphBox.firstChild);
@@ -13,10 +14,11 @@ window.api.receive("remind-list-answer", (data) => {
     const remindLastPersent = document.createElement("p");
     const remindBtn = document.createElement("button");
 
-    remindTitle.textContent = element.title;
-    remindChapter.textContent = element.chapter;
-    remindDays.textContent = element.days;
-    remindLastPersent.textContent = element.lastCorrectPersent;
+    remindTitle.textContent = "타이틀: " + element.title;
+    remindChapter.textContent = "챕터: " + element.chapter;
+    remindDays.textContent = "초과 일: " + element.days;
+    remindLastPersent.textContent =
+      "마지막 정답률: " + element.lastCorrectPersent;
     remindBtn.textContent = "시작";
 
     remindObject.className = "remind-object";
