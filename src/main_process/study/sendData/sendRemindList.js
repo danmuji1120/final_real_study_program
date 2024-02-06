@@ -13,7 +13,6 @@ ipcMain.on("remind-list", (event) => {
   titleList.forEach((title) => {
     countAndDays[title] = {};
     const data = analyzer.getAnswerIdListPerChapter(title);
-    console.log(data);
     Object.keys(data).forEach((chapter) => {
       let count = 0;
       let preDate = "NULL";
@@ -24,19 +23,23 @@ ipcMain.on("remind-list", (event) => {
         );
         lastCorrectPersent = correctPersent;
         const onlyDate = date.match(/\d{4}-\d{2}-\d{2}/)[0];
-        // console.log("onlyDate", onlyDate, " preDate: ", preDate);
         if (correctPersent >= ALLOW_PERSENT) {
           if (onlyDate !== preDate) {
+            count += 1;
+          } else if (count == 0) {
             count += 1;
           }
         } else {
           count = 0;
+        }
+        if (chapter == "숙어01") {
         }
         preDate = onlyDate;
       });
       const days = daysAgo(preDate);
       countAndDays[title][chapter] = { count: count, days: days };
       const remindDay = getRemindDay(count, days);
+
       if (remindDay !== false) {
         targetList.push({
           title: title,
@@ -63,7 +66,3 @@ function getRemindDay(count, days) {
     }
   }
 }
-// console.log(remindDay(1, 2));
-
-// console.log(countAndDays);
-// console.log(targetList);

@@ -62,11 +62,11 @@ class LowerStudy extends MiddleStudy {
     this.incorrectAnswerNoteList = [];
     this.questionIndex = 0;
     this.answerIndex = 1;
-    this.status = "stop";
+    this.status = "noteStart";
     this.incorrectAnswerNoteCount += 1;
     this.generateRecordContainer();
-    console.log(this.questionIdList);
-    console.log(this.record);
+    // console.log(this.questionIdList);
+    // console.log(this.record);
   }
   nextQuestion() {
     if (this.setCurrentId()) {
@@ -138,9 +138,9 @@ class LowerStudy extends MiddleStudy {
       return true;
     } else {
       if (this.status === "stop") {
-        console.log("상태가 stop일 경우");
+        // console.log("상태가 stop일 경우");
         if (this.moveIndex()) {
-          console.log("다음 정답인덱스");
+          // console.log("다음 정답인덱스");
           this.message.statusText = this.message.statusText = `이제 ${
             this.settings.contentText[this.questionIndex]
           }을 보고 ${
@@ -152,6 +152,8 @@ class LowerStudy extends MiddleStudy {
         } else {
           return this.nextQuestion();
         }
+      } else if (this.status === "noteStart") {
+        return this.nextQuestion();
       } else {
         this.answerProcessing(userAnswer);
         return true;
@@ -163,7 +165,7 @@ class LowerStudy extends MiddleStudy {
     let valueToggle = false;
     answerData.forEach((value, index) => {
       if (this.settings.ignoreSpecial) {
-        console.log("특수문자 무시 on");
+        // console.log("특수문자 무시 on");
         userAnswer = userAnswer
           .replace(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/gi, "")
           .replace(/[\s]/gi, "");
@@ -176,12 +178,6 @@ class LowerStudy extends MiddleStudy {
         valueToggle = true;
         // 이미 입력한 답일 경우
         if (this.alreadyAnswer.includes(index)) {
-          console.log(
-            "현재 인덱스: ",
-            index,
-            "이미 입력한 인덱스: ",
-            this.alreadyAnswer
-          );
           this.message.statusText = "이미 입력한 답입니다.";
           this.message.statusColor = "red";
         } else {
@@ -192,9 +188,10 @@ class LowerStudy extends MiddleStudy {
             this.answerIndex,
             index
           );
+          console.log(this.recordBox.record);
           this.alreadyAnswer.push(index);
           if (this.alreadyAnswer.length === this.getAnswerData().length) {
-            console.log("모든 정답을 맞춤");
+            // console.log("모든 정답을 맞춤");
             this.answerCount = ANSWERCOUNT;
             this.message.statusText = "정답. 엔터를 입력하면 다음 문제";
             this.message.statusColor = "green";
@@ -245,7 +242,7 @@ class LowerStudy extends MiddleStudy {
     this.wordBox[this.getCurrentId()][this.answerIndex].forEach(
       (value, index) => {
         this.recordBox.pushAnswerIndex(
-          this.getCurrentId,
+          this.getCurrentId(),
           this.questionIndex,
           this.answerIndex,
           index

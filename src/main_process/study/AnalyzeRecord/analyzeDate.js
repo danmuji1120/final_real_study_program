@@ -10,12 +10,14 @@ class AnalyzeDate extends AnalyzeWordList {
     const recordPerDate = getChapterRecord(title, chapter);
     const chapterWordBox = getChapterData(title, chapter);
     const result = { record: {}, total: Object.keys(chapterWordBox).length };
-    Object.keys(recordPerDate).forEach((date) => {
-      result.record[date] = this.getAnswerIdList(
-        recordPerDate[date],
-        chapterWordBox
-      );
-    });
+    try {
+      Object.keys(recordPerDate).forEach((date) => {
+        result.record[date] = this.getAnswerIdList(
+          recordPerDate[date],
+          chapterWordBox
+        );
+      });
+    } catch (error) {}
     return result;
   }
   getCountPerDate(title, chapter) {
