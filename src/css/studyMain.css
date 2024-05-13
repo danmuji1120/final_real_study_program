@@ -1,0 +1,30 @@
+#graph-box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* justify-content: start !important; */
+  /* align-items: start !important; */
+  align-content: start !important;
+}
+.remind-object {
+  display: flex;
+  width: 160px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 4px;
+}
+.remind-object * {
+  margin: 1px;
+}
+
+.remind-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.remind-btn {
+  width: 50px;
+  height: 25px;
+}
