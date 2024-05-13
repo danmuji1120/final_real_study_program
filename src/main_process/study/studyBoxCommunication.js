@@ -5,7 +5,9 @@ const loadJson = require("../file_manager/loadData");
 const path = require("node:path");
 
 ipcMain.on("load-title-data", (event, titleName) => {
-  studyBox.setTitle(titleName);
+  if (titleName != null) {
+    studyBox.setTitle(titleName);
+  }
   console.log("선택된 타이틀: ", studyBox.getTitle());
   console.log("선택된 설정값: ", studyBox.getSettings());
 });

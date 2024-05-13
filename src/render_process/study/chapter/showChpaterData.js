@@ -35,7 +35,10 @@ window.api.receive("load-chapter-data-answer", (chapterData) => {
 
   const btnDiv = document.createElement("div");
   btnDiv.style.display = "flex";
-  btnDiv.style.justifyContent = "flex-end";
+  btnDiv.style.width = "100%";
+  btnDiv.style.justifyContent = "space-between";
+  btnDiv.style.marginBottom = "30px";
+  // btnDiv.style.alignConten = "space-between";
   const startBtn = document.createElement("button");
   startBtn.textContent = "시작";
   startBtn.style.marginRight = "20px";
@@ -46,9 +49,35 @@ window.api.receive("load-chapter-data-answer", (chapterData) => {
   startBtn.style.borderRadius = "8px";
   startBtn.style.color = "white";
   startBtn.style.backgroundColor = "#1560BD";
+  startBtn.style.margin = "30px";
+
   startBtn.addEventListener("click", () => {
     window.api.send("page:change", "windows/studyTestMain.html");
   });
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "삭제";
+  deleteBtn.style.marginRight = "20px";
+  deleteBtn.style.width = "100px";
+  deleteBtn.style.height = "50px";
+  deleteBtn.style.fontSize = "20px";
+  deleteBtn.style.border = "none";
+  deleteBtn.style.borderRadius = "8px";
+  deleteBtn.style.color = "white";
+  deleteBtn.style.backgroundColor = "red";
+  deleteBtn.style.margin = "30px";
+
+  deleteBtn.addEventListener("click", () => {
+    window.api.send("delete-chapter", {});
+  });
+
+  btnDiv.append(deleteBtn);
   btnDiv.append(startBtn);
   graphBox.appendChild(btnDiv);
+});
+
+window.api.receive("delete-chapter-answer", (result) => {
+  if (result == 1) {
+    window.api.send("load-title-data", null);
+  }
 });
