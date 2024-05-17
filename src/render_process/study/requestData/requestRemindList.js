@@ -8,17 +8,20 @@ window.api.receive("remind-list-answer", (data) => {
   // console.log(data);
   data.forEach((element) => {
     const remindObject = document.createElement("div");
+    remindObject.className = "remind-object";
     const remindTitle = document.createElement("p");
+    remindTitle.className = "remind-title";
     const remindChapter = document.createElement("p");
     const remindDays = document.createElement("p");
     const remindLastPersent = document.createElement("p");
     const remindBtn = document.createElement("button");
+    remindBtn.className = "remind-btn";
 
-    remindTitle.textContent = "타이틀: " + element.title;
-    remindChapter.textContent = "챕터: " + element.chapter;
-    remindDays.textContent = "초과 일: " + element.days;
+    remindTitle.textContent = element.title;
+    remindChapter.textContent = element.chapter;
+    remindDays.textContent = element.days + "일 초과";
     remindLastPersent.textContent =
-      "마지막 정답률: " + element.lastCorrectPersent;
+      "마지막 정답률: " + element.lastCorrectPersent + "%";
     remindBtn.textContent = "시작";
 
     remindObject.className = "remind-object";

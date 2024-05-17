@@ -13,28 +13,75 @@
   text-align: center;
 }
 
-.main-box h1 {
+.questionTitle {
   margin: 40px;
   font-size: 60px;
   flex-wrap: nowrap;
 }
-.main-box p {
+.questionTitle-hiden {
+  margin: 40px;
+  font-size: 20px;
+  flex-wrap: nowrap;
+}
+.responseStatus {
   font-size: 30px;
   margin-bottom: 20px;
 }
-.main-box input {
+.responseStatus-hiden {
+  font-size: 10px;
+  margin-bottom: 20px;
+}
+
+.userAnswer {
   height: 60px;
   width: 700px;
   font-size: 40px;
   background-color: transparent;
   border-radius: 10px;
   margin: 20px;
+  border: none;
 }
-.main-box button {
+.userAnswer-hiden {
+  height: 30px;
+  width: 400px;
+  font-size: 20px;
+  background-color: transparent;
+  border-radius: 4px;
+  margin: 20px;
+  border: none;
+}
+.userAnswer-hiden :focus {
+  outline: none;
+}
+.userAnswer:focus {
+  outline: none;
+}
+.correctBtn {
   width: 100px;
   height: 50px;
   font-size: 20px;
   border-radius: 5px;
   border: 1px solid black;
   background-color: whitesmoke;
+}
+
+#secret {
+  display: flex;
+  align-items: center;
+  /* border: 1px solid black; */
+  margin: 0px;
+  padding: 0px;
+  margin-top: 10px;
+}
+#secret * {
+  margin: 0px;
+  padding: 0px;
+}
+#secret input {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+#secret p {
+  font-size: 20px !important;
 }
