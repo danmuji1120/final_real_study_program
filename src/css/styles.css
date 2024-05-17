@@ -86,16 +86,18 @@ body {
   /* background-color: #b4b4b4; */
 }
 .title div {
-  display: grid;
-  padding: 20px;
+  /* display: grid; */
+  /* padding: 20px; */
   /* border: 1px solid black; */
 }
 #title-box {
   display: flex;
   flex-direction: column;
+  height: inherit;
+  /* flex-wrap: wrap; */
   /* justify-content: top; */
   align-items: center;
-  height: 65vh;
+  /* height: 65vh; */
   overflow: auto;
   /* border: 1px solid black; */
 }
@@ -107,9 +109,10 @@ body {
   border-radius: 4px;
   width: 20vw;
   height: 40px;
-  font-size: 30px;
+  /* font-size: 4vw; */
+  font-size: clamp(10px, 1.5rem, 4vw);
   font-weight: bolder;
-  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 #content-header h1 {
